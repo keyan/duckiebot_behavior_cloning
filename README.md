@@ -33,3 +33,16 @@ The `data_converter` directory contains scripts to process ROS bags into synchro
 ## Model training
 
 ## Evaluation
+
+## Controls Background
+
+The following ROS topics are used to create a synchronized dataset of images to controls used:
+```
+# Compressed camera output
+/camera_node/image/compressed
+
+# Joystick configuration message, see https://docs.ros.org/en/api/sensor_msgs/html/msg/Joy.html
+/joy
+```
+
+The axes values from the joystick configuration are used to determine linear and angular velocity controls for the robot, which we can then convert to wheel velocities using a hand tuned wrapper, see https://git.io/Js2m9.

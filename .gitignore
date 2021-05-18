@@ -1,8 +1,10 @@
 __pycache__
 *swp
 *swo
+logfiles/
 
 # ROS bag files are too big
 *.bag
 
+# Log files are too big, fetch them from Dropbox.
 *.log
