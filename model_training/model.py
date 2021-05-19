@@ -10,7 +10,7 @@ import torch
 from torch import nn
 
 
-class VelocityModel(nn.Module):
+class Modelv0(nn.Module):
     """
     This model uses a much smaller net than the NVIDA paper, and also shares
     the bulk of the net between both the linear and angular velocity outputs

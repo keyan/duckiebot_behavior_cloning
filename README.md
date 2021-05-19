@@ -26,6 +26,11 @@ The full dataset used for the final model is XGB and is hosted here: //TODO
 Using pure pursuit we can generate control/image data to use for model training using gym-duckietown, this notebook implements this and was used to generate the `simulated.log` dataset:
 https://colab.research.google.com/drive/1Heh65KRqc6HhEyyYOlqNmORvKRWrE8Es?usp=sharing
 
+To generate data use this command in [this directory](https://github.com/duckietown/challenge-aido_LF-baseline-behavior-cloning/tree/master/duckieSchool/duckieGym) of the template repo:
+```
+python automatic.py --domain-rand True --nb-episodes 10 --steps 1000 --downscale
+```
+
 ### Real robot
 
 The `data_converter` directory contains scripts to process ROS bags into synchronized training data logs. There is an additional README in that directory that explains usage in more detail. Real robot logs were extracted from public logs hosted on http://logs.duckietown.org/.

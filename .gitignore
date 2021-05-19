@@ -1,10 +1,18 @@
-__pycache__
+# Editor files
 *swp
 *swo
-logfiles/
 
 # ROS bag files are too big
 *.bag
-
 # Log files are too big, fetch them from Dropbox.
+logfiles/
 *.log
+
+# Tensorboard logs
+runs/
+
+# Default saved model
+saved_model.pth
+
+# Development stuff
+__pycache__
