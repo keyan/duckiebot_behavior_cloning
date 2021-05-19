@@ -1,6 +1,7 @@
 # Editor files
 *swp
 *swo
+.DS_Store
 
 # ROS bag files are too big
 *.bag

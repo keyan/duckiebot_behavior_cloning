@@ -1,0 +1,9 @@
+protocol: aido2_db18_agent-z2
+challenge: [aido5-LF-sim-validation]
+#challenge: [] # This will submit to all available challenges.
+user-label: "modelv0-behavior-cloning"
+user-payload:
+    features_required:
+        gpu: 1
+description: |
+    Behavior cloning modelv0 solution.
