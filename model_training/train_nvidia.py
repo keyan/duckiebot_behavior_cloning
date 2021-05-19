@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from log_reader import Reader
-from modelv0 import Modelv0
+from nvidia_model import NvidiaModel
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,7 +21,7 @@ INIT_LR = 1e-3
 BATCH_SIZE = 16
 TRAIN_PERCENT = 0.9
 MOMENTUM = 0.9
-DEFAULT_SAVE_NAME = 'saved_model'
+DEFAULT_SAVE_NAME = 'saved_nvidia_model'
 # How close a prediction needs to be to the true label
 # in order to be considered accurate.
 PCT_CLOSE = 0.05
@@ -118,11 +118,15 @@ def train(args):
     cpu_device = torch.device('cpu')
     logging.info(f'Training on device: {device}')
 
-    model = Modelv0()
-    model.to(device)
+    model_lin = NvidiaModel()
+    model_lin.to(device)
     criterion_lin = nn.MSELoss()
+    optimizer_lin = optim.SGD(model_lin.parameters(), lr=args.learning_rate, momentum=MOMENTUM)
+
+    model_ang = NvidiaModel()
+    model_ang.to(device)
     criterion_ang = nn.MSELoss()
-    optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=MOMENTUM)
+    optimizer_ang = optim.SGD(model_ang.parameters(), lr=args.learning_rate, momentum=MOMENTUM)
 
     # For logging to Tensorboard.
     tb_writer = SummaryWriter()
@@ -142,17 +146,20 @@ def train(args):
             target_lin = batch['lin_vel'].to(device)
             target_ang = batch['ang_vel'].to(device)
 
-            optimizer.zero_grad()
+            optimizer_lin.zero_grad()
+            optimizer_ang.zero_grad()
             # Loss from different loss functions can be summed, see:
             #   https://discuss.pytorch.org/t/a-model-with-multiple-outputs/10440/2
-            output_lin, output_ang = model(inputs)
+            output_lin = model_lin(inputs)
+            output_ang = model_ang(inputs)
             loss_lin = criterion_lin(output_lin, target_lin)
             loss_ang = criterion_ang(output_ang, target_ang)
-            total_loss = loss_lin + loss_ang
-            total_loss.backward()
-            optimizer.step()
+            loss_lin.backward()
+            loss_ang.backward()
+            optimizer_lin.step()
+            optimizer_ang.step()
 
-            training_loss += total_loss.item()
+            training_loss += (loss_lin + loss_ang).item()
             # Keep track of how many predictions are within PCT_CLOSE of label.
             num_correct_pred_lin += torch.sum(
                 torch.abs(output_lin - target_lin) < torch.abs(PCT_CLOSE * target_lin)
@@ -179,7 +186,8 @@ def train(args):
             target_ang = batch['ang_vel'].to(device)
 
             with torch.no_grad():
-                output_lin, output_ang = model(inputs)
+                output_lin = model_lin(inputs)
+                output_ang = model_ang(inputs)
                 loss_lin = criterion_lin(output_lin, target_lin)
                 loss_ang = criterion_ang(output_ang, target_ang)
 

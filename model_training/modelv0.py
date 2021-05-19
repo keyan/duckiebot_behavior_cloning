@@ -5,6 +5,17 @@ linear and angular velocity controls that should be applied.
 For overall idea see:
     End to End Learning for Self-Driving Cars 2016
     https://arxiv.org/abs/1604.07316
+
+Results:
+    - simulated+maserati dataset
+    - colab training time on 1 GPU for 5000 epochs: ~7.5hrs
+    - final perf:
+        Training loss: 0.00010604301950294024
+        Validation loss: 0.0005209731298163232
+        Training acc linear vel: 96.43%
+        Training acc ang vel: 55.54%
+        Validation acc linear vel: 9.07%
+        Validation acc ang vel: 3.29%
 """
 import torch
 from torch import nn
