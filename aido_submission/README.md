@@ -22,8 +22,6 @@ dts challenges submit
 
 ## Local testing
 
-I haven't gotten this to work yet. I think the base Docker container sets the `AIDO_REQUIRE_GPU` requiring local GPU or it will raise. I didn't try changing this envvar from the Dockerfile yet.
-
 Test locally, note that only some challenges allow local testing, so you might need to change `submission.yaml`:
 ```
 dts challenges evaluate
@@ -41,3 +39,4 @@ dts duckiebot evaluate --duckiebot_name DUCKIEBOT_NAME
 1. baseline:
     - https://challenges.duckietown.org/v4/humans/submissions/15504
 1. v0
+    - https://challenges.duckietown.org/v4/humans/submissions/15509

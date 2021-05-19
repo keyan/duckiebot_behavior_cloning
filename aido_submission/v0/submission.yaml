@@ -6,7 +6,7 @@ protocol: aido2_db18_agent-z2
 #   - aido-LF-sim-testing
 #     - remote only
 #     - aido2_db18_agent-z2 protocol
-challenge: [aido-LF-sim-testing]
+challenge: [aido-LF-sim-validation]
 #challenge: [] # This will submit to all available challenges.
 user-label: "modelv0-behavior-cloning"
 user-payload:

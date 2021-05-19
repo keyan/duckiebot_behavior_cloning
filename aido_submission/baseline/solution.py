@@ -57,7 +57,7 @@ class DuckieChallenger:
             if not name:  # None or ''
                 msg = 'Could not find gpu device.'
                 logger.error(msg)
-                raise RuntimeError(msg)
+                # raise RuntimeError(msg)
 
     def on_received_seed(self, data: int):
         np.random.seed(data)

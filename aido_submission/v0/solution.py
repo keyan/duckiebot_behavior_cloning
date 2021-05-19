@@ -35,7 +35,11 @@ class Agent:
         context.info('init()')
 
         model = Modelv0()
-        model.load_state_dict(torch.load('modelv0_maserati_plus_simulated.pth'))
+        model.load_state_dict(
+            torch.load(
+                'modelv0_maserati_plus_simulated.pth',
+                map_location=self.device,
+        ))
         model.eval()
         self.model = model.to(self.device)
 
@@ -56,9 +60,8 @@ class Agent:
             context.info(f'device {i} of {count}; name = {name!r}')
         else:
             if req is not None:
-                msg = 'I need a GPU; bailing.'
+                msg = 'No GPU found'
                 context.error(msg)
-                raise RuntimeError(msg)
 
     def on_received_seed(self, data: int):
         np.random.seed(data)
@@ -85,9 +88,10 @@ class Agent:
         """
         Use prior observation to predict best action, return predictions for velocities.
         """
-        linear, angular = self.model(observation.to(self.device))
-        linear = linear.to(torch.device('cpu'))
-        angular = angular.to(torch.device('cpu'))
+        obs = torch.from_numpy(observation).float().to(self.device)
+        linear, angular = self.model(obs)
+        linear = linear.to(torch.device('cpu')).data.numpy().flatten()
+        angular = angular.to(torch.device('cpu')).data.numpy().flatten()
         return linear, angular
 
     # ! Major Manipulation here. Should not always change.
