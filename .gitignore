@@ -14,6 +14,8 @@ runs/
 
 # Default saved model
 saved_model.pth
+# Baseline model, ~500mb, fetch with wget to keep git history small
+FrankNet.h5
 
 # Development stuff
 __pycache__
