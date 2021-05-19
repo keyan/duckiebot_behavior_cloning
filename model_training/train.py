@@ -50,12 +50,12 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Training Setup')
 
     parser.add_argument(
-        '--epochs', help='Set the total training epochs', default=EPOCHS
+        '--epochs', help='Set the total training epochs', default=EPOCHS, type=int,
     )
     parser.add_argument(
-        '--learning_rate', help='Set the initial learning rate', default=INIT_LR
+        '--learning_rate', help='Set the initial learning rate', default=INIT_LR, type=float,
     )
-    parser.add_argument('--batch_size', help='Set the batch size', default=BATCH_SIZE)
+    parser.add_argument('--batch_size', help='Set the batch size', default=BATCH_SIZE, type=int)
     parser.add_argument(
         '--log_file', help='Set the training log file name', required=True,
     )
@@ -65,7 +65,7 @@ def parse_args():
     parser.add_argument(
         '--split',
         help='Set the training and test split point (input the percentage of training)',
-        default=TRAIN_PERCENT,
+        default=TRAIN_PERCENT, type=float,
     )
 
     return parser.parse_args()

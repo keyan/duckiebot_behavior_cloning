@@ -37,6 +37,18 @@ The `data_converter` directory contains scripts to process ROS bags into synchro
 
 ## Model training
 
+```
+./fetch_training_data.sh
+
+# Trains the default dataset downloaded in the prior command.
+python train.py --log_file simulated_plus_maserati.log --epochs 100
+```
+
+In another session you can start Tensorboard and monitor training:
+```
+tensorboard --logdir model_training/runs/
+```
+
 ## Evaluation
 
 ## Controls Background
