@@ -224,7 +224,8 @@ def train(args):
         tb_writer.add_scalar('Accuracy/validation/linear', validation_accuracy_lin_pct, epoch)
         tb_writer.add_scalar('Accuracy/validation/angular', validation_accuracy_ang_pct, epoch)
 
-    torch.save(model.state_dict(), f'./{args.save_name}.pth')
+    torch.save(model_lin.state_dict(), f'./{args.save_name}_lin.pth')
+    torch.save(model_ang.state_dict(), f'./{args.save_name}_ang.pth')
     logging.info('Finished Training')
 
 
