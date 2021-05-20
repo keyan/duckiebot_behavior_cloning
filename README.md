@@ -2,9 +2,15 @@
 
 Code for training a CNN to learn end-to-end driving controls through behavior cloning using simulated and real robot execution logs.
 
+![aido](https://user-images.githubusercontent.com/6401746/118901520-58570500-b8c8-11eb-9bff-6795ee6cd470.gif)
+
 ## Repo Structure
 ```
-// TODO
+├── aido_submission         # Complete AIDO submissions, one per subdir
+├── data_converter          # Scripts to aid in data collection/cleaning
+├── fetch_training_data.sh  # Script to fetch the current largest training dataset
+├── log_utils               # Scripts to aid in visualizing dataset frames and merging datasets
+└── model_training          # Pytorch CNN models and training code
 ```
 
 ## Setup/Usage
@@ -50,6 +56,8 @@ tensorboard --logdir model_training/runs/
 ```
 
 ## Evaluation
+
+Currently all evaluation is being done using the AIDO submission format and performing local or remote evaluation against the simulator. More details are in the README in `/aido_submissions`.
 
 ## Controls Background
 

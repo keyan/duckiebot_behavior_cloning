@@ -40,3 +40,4 @@ dts duckiebot evaluate --duckiebot_name DUCKIEBOT_NAME
     - https://challenges.duckietown.org/v4/humans/submissions/15504
 1. v0
     - https://challenges.duckietown.org/v4/humans/submissions/15509
+    - https://challenges.duckietown.org/v4/humans/submissions/15512
