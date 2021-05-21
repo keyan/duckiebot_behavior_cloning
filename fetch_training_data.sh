@@ -3,3 +3,6 @@ wget https://www.dropbox.com/s/ztari0lwvz51cbd/simulated_plus_maserati.log?dl=1 
 
 # This is a very small dataset which is good for testing new models locally for syntax errors/etc.
 wget https://www.dropbox.com/s/03zlt4m4ug5nx4r/sim_small_plus_tori.log?dl=1 -O sim_small_plus_tori.log
+
+# huge dataset, mostly simulated data
+wget https://www.dropbox.com/s/ms75dkdin6xr89x/maserati_bill_simulated_amadobot_base.log?dl=1 -O maserati_bill_simulated_amadobot_base.log

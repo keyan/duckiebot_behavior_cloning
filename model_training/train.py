@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from log_reader import Reader
 from modelv0 import Modelv0
+from modelv1 import Modelv1
 
 logging.basicConfig(level=logging.INFO)
 
@@ -67,6 +68,11 @@ def parse_args():
         help='Set the training and test split point (input the percentage of training)',
         default=TRAIN_PERCENT, type=float,
     )
+    parser.add_argument(
+        '--model',
+        help='Specify the model to use: [v0, v1]',
+        default='v0', type=str,
+    )
 
     return parser.parse_args()
 
@@ -118,7 +124,11 @@ def train(args):
     cpu_device = torch.device('cpu')
     logging.info(f'Training on device: {device}')
 
-    model = Modelv0()
+    if args.model == 'v1':
+        model = Modelv1()
+    else:
+        model = Modelv0()
+
     model.to(device)
     criterion_lin = nn.MSELoss()
     criterion_ang = nn.MSELoss()
@@ -194,9 +204,9 @@ def train(args):
 
         validation_loss /= len(val_dataset)
         num_correct_pred_lin = num_correct_pred_lin.to(cpu_device)
-        validation_accuracy_lin_pct = (num_correct_pred_lin.item() / len(train_dataset)) * 100
+        validation_accuracy_lin_pct = (num_correct_pred_lin.item() / len(val_dataset)) * 100
         num_correct_pred_ang = num_correct_pred_ang.to(cpu_device)
-        validation_accuracy_ang_pct = (num_correct_pred_ang.item() / len(train_dataset)) * 100
+        validation_accuracy_ang_pct = (num_correct_pred_ang.item() / len(val_dataset)) * 100
 
         ########################################################################
         # Logging

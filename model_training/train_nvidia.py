@@ -202,9 +202,9 @@ def train(args):
 
         validation_loss /= len(val_dataset)
         num_correct_pred_lin = num_correct_pred_lin.to(cpu_device)
-        validation_accuracy_lin_pct = (num_correct_pred_lin.item() / len(train_dataset)) * 100
+        validation_accuracy_lin_pct = (num_correct_pred_lin.item() / len(val_dataset)) * 100
         num_correct_pred_ang = num_correct_pred_ang.to(cpu_device)
-        validation_accuracy_ang_pct = (num_correct_pred_ang.item() / len(train_dataset)) * 100
+        validation_accuracy_ang_pct = (num_correct_pred_ang.item() / len(val_dataset)) * 100
 
         ########################################################################
         # Logging
