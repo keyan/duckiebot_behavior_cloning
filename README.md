@@ -27,9 +27,11 @@ conda activate behavior_clone
 
 These are the datasets currently fetched by the `fetch_training_data.sh` script:
 1. `sim_small_plus_tori.log`
-    - Very small, mix of some real robot and simulated robot logs, meant for local dev only
+    - very small, mix of some real robot and simulated robot logs, meant for local dev only
 1. `simulated_plus_maserati.log`
-    - The current best dataset, about 9000 frames total of simulated and real logs
+    - the current best dataset, about 9000 frames total of simulated and real logs
+1. `maserati_bill_simulated_amadobot_base`
+    - the biggest dataset currently, has all the usable simulated and real robot data (~5GB)
 
 ### Simulated
 
