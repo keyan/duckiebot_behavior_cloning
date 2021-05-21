@@ -23,9 +23,13 @@ conda env create -f environment.yml
 conda activate behavior_clone
 ```
 
-## Dataset generation
+## Datasets generation
 
-The full dataset used for the final model is XGB and is hosted here: //TODO
+These are the datasets currently fetched by the `fetch_training_data.sh` script:
+1. `sim_small_plus_tori.log`
+    - Very small, mix of some real robot and simulated robot logs, meant for local dev only
+1. `simulated_plus_maserati.log`
+    - The current best dataset, about 9000 frames total of simulated and real logs
 
 ### Simulated
 
