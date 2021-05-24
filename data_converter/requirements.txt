@@ -1,0 +1,9 @@
+h5py
+pyyaml
+rospkg
+pandas
+tables
+requests
+pyrosbag
+opencv-python
+numpy
