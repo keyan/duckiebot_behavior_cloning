@@ -1,0 +1,20 @@
+protocol: aido2_db18_agent-z2
+# Each challenge is associated with a specific protocol that can be used.
+# Furthermore, some challenges are not for local evaluation, they are meant
+# only for final remote testing.
+# Some challenges:
+#   - aido-LF-sim-testing
+#     - remote only
+#     - aido2_db18_agent-z2 protocol
+#   - aido-LF-sim-validation
+#     - remote/local
+#     - aido2_db18_agent-z2 protocol
+# challenge: [aido-LF-sim-validation]
+challenge: [mooc-modcon]
+#challenge: [] # This will submit to all available challenges.
+user-label: "modelv0-behavior-cloning"
+user-payload:
+    features_required:
+        gpu: 1
+description: |
+    Behavior cloning modelv0 solution.
