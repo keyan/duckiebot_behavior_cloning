@@ -37,7 +37,8 @@ class Agent:
         model = Modelv1()
         model.load_state_dict(
             torch.load(
-                'modelv1_maserati_plus_simulated.pth',
+                "modelv1_maserati_bill_simulated_amadobot_base.pth",
+                # 'modelv1_maserati_plus_simulated.pth',
                 map_location=self.device,
         ))
         model.eval()
