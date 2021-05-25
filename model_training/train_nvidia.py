@@ -138,6 +138,8 @@ def train(args):
         ########################################################################
         # Training
         ########################################################################
+        model_lin.train()
+        model_ang.train()
         training_loss = 0.0
         num_correct_pred_lin = torch.tensor(0).to(device)
         num_correct_pred_ang = torch.tensor(0).to(device)
@@ -177,6 +179,8 @@ def train(args):
         ########################################################################
         # Validation
         ########################################################################
+        model_lin.eval()
+        model_ang.eval()
         validation_loss = 0.0
         num_correct_pred_lin = torch.tensor(0).to(device)
         num_correct_pred_ang = torch.tensor(0).to(device)
