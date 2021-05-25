@@ -1,0 +1,107 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, enumitem, url}
+\usepackage{xcolor}
+
+% For figures.
+% Package float, adds the H option which forces figure placement.
+\usepackage{graphicx, float}
+\graphicspath{ {./figures/} }
+
+\newcommand\todo{\textcolor{red}{\textbf{[TODO:] }}}
+
+\title{CSE571 Project 2}
+\author{Group: Dropouts}
+\date{June 2021}
+
+\begin{document}
+\maketitle
+
+\section{Group Information}
+
+Members:
+\begin{itemize}
+    \item Keyan Pishdadian (keyanp@cs.washington.edu)
+    \item Jakub Filipek (balbok@cs.washington.edu)
+    \item Kyle Deeds (kdeeds@cs.washington.edu)
+\end{itemize}
+
+\noindent Source code for behavior cloning approach:
+\newline
+\url{https://github.com/keyan/duckiebot_behavior_cloning}
+
+\noindent Source code for reinforcement learning approach:
+\newline
+\url{https://github.com/balbok0/cse571-sp21-project-2-dropouts}
+
+\section{Task Overview}
+
+\todo Reproducing RL research usually doesn't work: https://arxiv.org/abs/1709.06560
+
+\section{Environment Setup}
+\subsection{Simulation}
+\todo Discuss gym-duckietown and AIDO submissions
+
+\subsection{Real World}
+\todo Show different maps used
+
+% \begin{figure}[H]
+% \includegraphics[width=8cm,keepaspectratio]{map_simple_loop}
+% \centering
+% \caption{Photo of physical layout of map 1.}
+% \label{fig:map_simple_loop}
+% \end{figure}
+
+\section{Reinforcement Learning Approach}
+\todo Discuss our initial approach using RL
+
+\todo how we anticipated this would work
+
+\todo ultimately how it performed poorly
+
+\subsection{DQN}
+\todo Discuss general algorithmic idea behind DQN
+
+\todo Show training results using DQN and videos of simulator performance
+
+\subsection{DDPG}
+\todo Discuss general algorithmic idea behind DDPG
+
+\todo Show training results using DDPG and videos of simulator performance
+
+\section{Behavior Cloning Approach}
+\todo High level overview of behavior cloning and end-to-end control with monocular images
+
+\subsection{Data Preparation}
+\todo Discuss data collection procedure and cleaning
+
+\todo Discuss final datasets used
+
+\subsection{Model Architectures}
+\todo Discuss each model architecture evaluted
+
+\todo Show data from training
+
+\section{Performance Evaluation}
+\subsection{Simulator and AIDO}
+\todo Share links to videos from simulator and AIDO submissions
+
+\todo Discuss quantative performance for each model including baseline
+
+\subsection{Real World}
+
+\todo Discuss quantative performance for each model including baseline
+
+\todo Share links to videos for each map/model evaluated
+
+\section{Potential Future Improvements}
+
+\todo Discuss algorithmic enhancements
+
+\todo Discuss robot limitations
+
+\bibliographystyle{alpha}
+\bibliography{paper}
+
+\end{document}

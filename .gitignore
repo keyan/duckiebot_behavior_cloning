@@ -19,3 +19,6 @@ FrankNet.h5
 
 # Development stuff
 __pycache__
+
+# Latex
+*.aux
