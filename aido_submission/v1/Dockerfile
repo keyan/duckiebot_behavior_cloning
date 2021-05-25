@@ -12,8 +12,8 @@ RUN pip3 install --use-feature=2020-resolver -r .requirements.txt
 # Copy all solution files to workspace
 WORKDIR /submission
 COPY solution.py /submission
-COPY modelv0_maserati_plus_simulated.pth /submission
+COPY modelv1_maserati_plus_simulated.pth /submission
 COPY helpers.py /submission
-COPY modelv0.py /submission
+COPY modelv1.py /submission
 
 ENTRYPOINT ["python3", "solution.py"]
