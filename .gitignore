@@ -1,3 +1,9 @@
+# IDE
+.vscode
+
+# Saved files from evaluate
+submission_history/
+
 # Editor files
 *swp
 *swo
