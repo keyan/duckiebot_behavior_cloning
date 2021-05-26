@@ -9,8 +9,8 @@ protocol: aido2_db18_agent-z2
 #   - aido-LF-sim-validation
 #     - remote/local
 #     - aido2_db18_agent-z2 protocol
-# challenge: [aido-LF-sim-validation]
-challenge: [mooc-modcon]
+challenge: [aido-LF-sim-validation]
+# challenge: [mooc-modcon]
 #challenge: [] # This will submit to all available challenges.
 user-label: "modelv0-behavior-cloning"
 user-payload:

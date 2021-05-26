@@ -12,9 +12,9 @@ protocol: aido2_db18_agent-z2
 challenge: [aido-LF-sim-validation]
 # challenge: [mooc-modcon]
 #challenge: [] # This will submit to all available challenges.
-user-label: "modelv1-behavior-cloning"
+user-label: "nvidia-behavior-cloning"
 user-payload:
     features_required:
         gpu: 1
 description: |
-    Behavior cloning modelv0 solution.
+    Behavior cloning nvidia solution.
