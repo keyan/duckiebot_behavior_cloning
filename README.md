@@ -61,6 +61,11 @@ In another session you can start Tensorboard and monitor training:
 tensorboard --logdir model_training/runs/
 ```
 
+This is the command for training the current best model (on Colab):
+```
+python model_training/train.py --model v1 --save_name modelv1 --split 0.9 --epochs 100 --batch_size 64 --log_file maserati_bill_simulated_amadobot_base.log --using_colab
+```
+
 ## Evaluation
 
 Currently all evaluation is being done using the AIDO submission format and performing local or remote evaluation against the simulator. More details are in the README in `/aido_submissions`.
