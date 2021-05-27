@@ -28,25 +28,6 @@ DEFAULT_SAVE_NAME = 'saved_model'
 PCT_CLOSE = 0.05
 
 
-class VelDataset(Dataset):
-    def __init__(self, observations, lin_velocities, ang_velocities):
-        self.observations = torch.from_numpy(observations).float()
-        self.lin_velocities = torch.from_numpy(lin_velocities).float()
-        self.ang_velocities = torch.from_numpy(ang_velocities).float()
-
-    def __len__(self):
-        return len(self.observations)
-
-    def __getitem__(self, idx):
-        sample = {
-            'image': self.observations[idx],
-            'lin_vel': self.lin_velocities[idx],
-            'ang_vel': self.ang_velocities[idx],
-        }
-
-        return sample
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Training Setup')
 
@@ -72,6 +53,11 @@ def parse_args():
         '--model',
         help='Specify the model to use: [v0, v1]',
         default='v0', type=str,
+    )
+    parser.add_argument(
+        '--using_colab',
+        help='Uses different settings to account for fewer system resources',
+        action='store_true', default=False,
     )
 
     return parser.parse_args()
@@ -234,4 +220,47 @@ def train(args):
 
 if __name__ == '__main__':
     args = parse_args()
+
+    # On Colab there isn't enough RAM to convert the torch tensors to floats because
+    # this reallocates memory. So here we convert to torch tensors but only convert
+    # to floats get getting items.
+    if args.using_colab:
+        class VelDataset(Dataset):
+            def __init__(self, observations, lin_velocities, ang_velocities):
+                self.observations = torch.from_numpy(observations)
+                self.lin_velocities = torch.from_numpy(lin_velocities)
+                self.ang_velocities = torch.from_numpy(ang_velocities)
+
+            def __len__(self):
+                return len(self.observations)
+
+            def __getitem__(self, idx):
+                sample = {
+                    'image': self.observations[idx].float(),
+                    'lin_vel': self.lin_velocities[idx].float(),
+                    'ang_vel': self.ang_velocities[idx].float(),
+                }
+
+                return sample
+    else:
+        # When we have enough RAM, training is faster when we do the float
+        # conversion just once when loading the dataset.
+        class VelDataset(Dataset):
+            def __init__(self, observations, lin_velocities, ang_velocities):
+                self.observations = torch.from_numpy(observations).float()
+                self.lin_velocities = torch.from_numpy(lin_velocities).float()
+                self.ang_velocities = torch.from_numpy(ang_velocities).float()
+
+            def __len__(self):
+                return len(self.observations)
+
+            def __getitem__(self, idx):
+                sample = {
+                    'image': self.observations[idx],
+                    'lin_vel': self.lin_velocities[idx],
+                    'ang_vel': self.ang_velocities[idx],
+                }
+
+                return sample
+
     train(args)
