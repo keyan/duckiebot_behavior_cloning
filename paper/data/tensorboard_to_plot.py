@@ -25,13 +25,12 @@ def plot(params):
 
     tag_groups = [
         ('Loss', ['Loss/train', 'Loss/validation']),
-        ('Angular Accuracy', ['Accuracy/train/linear', 'Accuracy/validation/linear']),
-        ('Linear Accuracy', ['Accuracy/train/angular', 'Accuracy/validation/angular']),
+        ('Linear Accuracy', ['Accuracy/train/linear', 'Accuracy/validation/linear']),
+        ('Angular Accuracy', ['Accuracy/train/angular', 'Accuracy/validation/angular']),
     ]
     # for tags in scalar_list:
     for title, tags in tag_groups:
         for tag in tags:
-            import pdb; pdb.set_trace()
             x = [int(s.step) for s in acc.Scalars(tag)]
             y = [s.value for s in acc.Scalars(tag)]
             color = BLUE if 'train' in tag else ORANGE
