@@ -17,6 +17,24 @@ See also: https://docs.duckietown.org/daffy/AIDO/out/embodied_bc.html
     python ../log_utils/log_viewer.py --log_name converted/YOUR_LOG.log
     ```
 
+## Manual data collection
+1. Export envvar for your robot name:
+    ```
+    export DUCKIEBOT_NAME=alfredo
+    ```
+2. Start recording episode:
+    ```
+    start_record
+    ```
+3. Execute policy you want to train on
+4. Stop recording:
+    ```
+    start_record
+    ```
+5. Download the ROS bag from your robot using the File Manager panel of the dashboard, http://DUCKIEBOT_NAME.local/dashboard/file-manager, it will be under `logs/`
+
+Optional: You may find it useful to run the lane following demo to have useful behavior to record, but its performance is variable. Start it with `start_lane` and read the log output explaining how to start/stop the driving.
+
 ## bag_files
 Each ROS bag file has an accompanying gif to show the rough path taken. All bag data is from publically available logs on: http://logs.duckietown.org/.
 
