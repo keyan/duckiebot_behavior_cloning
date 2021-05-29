@@ -12,7 +12,8 @@ RUN pip3 install --use-feature=2020-resolver -r .requirements.txt
 # Copy all solution files to workspace
 WORKDIR /submission
 COPY solution.py /submission
-COPY modelv1_maserati_bill_simulated_amadobot_base.pth /submission
+COPY modelv1_maserati_bill_simulated_amadobot_base_epoch_200.pth /submission
+# COPY modelv1_maserati_bill_simulated_amadobot_base.pth /submission
 # COPY modelv1_maserati_plus_simulated.pth /submission
 COPY helpers.py /submission
 COPY modelv1.py /submission
