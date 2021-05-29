@@ -69,7 +69,7 @@ Evaluation on the real duckiebot was done on four different maps (\ref{fig:maps}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[angle=270,width=8cm,keepaspectratio]{map2_real}
+\includegraphics[angle=-90,width=8cm,keepaspectratio]{map2_real}
 \centering
 \caption{Photo of physical layout of map2.}
 \label{fig:map2_real}
@@ -114,11 +114,11 @@ Real robot data was collected through a combination of accessing publicly availa
 % \begin{figure}[H]
 \begin{figure}
 \centering
-    \subfloat[\centering Simulated data]{{\includegraphics[width=5cm]{sim_data} }}
+    \subfloat[\centering Simulated data]{{\includegraphics[width=4cm]{sim_data} }}
     \qquad
-    \subfloat[\centering Public log data]{{\includegraphics[width=5cm]{log_data} }}
+    \subfloat[\centering Public log data]{{\includegraphics[width=4cm]{log_data} }}
     \qquad
-    \subfloat[\centering Custom data]{{\includegraphics[width=5cm]{custom_data} }}
+    \subfloat[\centering Custom data]{{\includegraphics[width=4cm]{custom_data} }}
     \caption{Example frames from the three different data sources used for training. Observations are downsampled 150x200 pixel images.}
     \label{fig:data_examples}
 \end{figure}
@@ -128,40 +128,76 @@ Ultimately we used two final datatsets. The largest (henceforth ``dataset A") wa
 \subsection{Model Architectures} \label{sec:model_arch}
 
     Our experiments were focused around two model architectures, the first was an attempt to reproduce results from NVIDIA \cite{DBLP:journals/corr/BojarskiTDFFGJM16} which we named the ``nvidia" model (Figure \ref{fig:model_arch}a). In order to predict two values (linear and angular velocity) two separate instantiations of this model were created with disjoint weights. The only major deviations from the originally published model were the use of leaky rectified linear unit (LeakyReLU) activations and dropout in-between linear layers ($p=0.5$).
-    The second architecture used a smaller number of total parameters, shared weights across the convolutional layers, and two outputs preceded by small disjoint linear layers (Figure \ref{fig:model_arch}b). We named the initial version of this model the clever name ``modelv0", subsequent experimentation produced a second version ``modelv1" which 
+    The second architecture used a smaller number of total parameters, shared weights across the convolutional layers, and two outputs preceded by small disjoint linear layers (Figure \ref{fig:model_arch}b). We named the initial version of this model ``modelv0", subsequent experimentation produced a second version ``modelv1" which substituted ReLU activations for LeakyReLU, and added dropout to the final linear layers ($p=0.5$) and the shared convolutional layers ($p=0.1$).
 
 \begin{figure}
     \subfloat[\centering]{\includegraphics[width=.22\textwidth,keepaspectratio]{nvidia_arch}}
     \subfloat[\centering]{\includegraphics[width=.43\textwidth,keepaspectratio]{dual_cnn_arch}}
 \centering
-\caption{}
+    \caption{Overview of the two primary model architectures evaluated in this work. (a) features a larger number of total parameters and no shared weights, each of the two prediction values retain their own copy of the model (b) uses shared convolutional layers and small linear layers preceding each of the two outputs.}
 \label{fig:model_arch}
 \end{figure}
 
 \subsection{Training}
-All models were trained initially on the aggregated dataset (``dataset A") for 200 epochs using stochastic gradient descent and mean squared error loss. Results of training can be seen in Figure \ref{fig:training_results}.
+All training was done using stochastic gradient descent and mean squared error loss. The models were trained initially on the aggregated dataset (``dataset A") for 200 epochs, results in Figure \ref{fig:training_results}. As the ``nvidia" model did not show promising results during training, it was excluded from further experimentation. Then ``modelv0" and ``modelv1" were fine tuned for 50 epochs using the custom real robot dataset (``dataset B"), results in Figure \ref{fig:fine_tuning_training_results}.
 
 \begin{figure}
   \centering
   \raisebox{35pt}{\parbox[b]{.1\textwidth}{nvidia}}%
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{nvidia_linear_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{nvidia_angular_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{nvidia_loss}}\par
+  \subfloat{\includegraphics[width=.28\textwidth]{nvidia_linear_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{nvidia_angular_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{nvidia_loss}}\par
   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv0}}%
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv0_linear_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv0_angular_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv0_loss}}\par
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_linear_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_angular_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_loss}}\par
   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv1}}%
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv1_linear_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv1_angular_accuracy}}\hfill
-  \subfloat[][]{\includegraphics[width=.28\textwidth]{modelv1_loss}}
-  \caption{Results from training the three different model architectures on dataset A, showing loss, linear accuracy, and angular accuracy achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_linear_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_angular_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_loss}}
+  \caption{Results from training the three different model architectures on dataset A, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
   \label{fig:training_results}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv0}}%
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_200_fine_tuned_cw_ccw_linear_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_200_fine_tuned_cw_ccw_angular_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv0_200_fine_tuned_cw_ccw_loss}}\par
+  \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv1}}%
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_linear_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_angular_accuracy}}\hfill
+  \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_loss}}\par
+  \caption{Results from fine tuning the shared weights models on dataset B, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
+  \label{fig:fine_tuning_training_results}
 \end{figure}
 
 \section{Performance Evaluations}
 
 \subsection{Simulator and AIDO}
+
+\todo 3x3 figure showing overview map trajectories from AIDO for initial 3 models on 3 maps
+% \begin{figure}
+%   \centering
+%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{nvidia}}%
+%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_linear_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_angular_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_loss}}\par
+%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv0}}%
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_linear_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_angular_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_loss}}\par
+%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv1}}%
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_linear_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_angular_accuracy}}\hfill
+%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_loss}}
+%   \caption{Results from training the three different model architectures on dataset A, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
+%   \label{fig:training_results}
+% \end{figure}
+
+\todo 2x3 figure showing overview map trajectories from AIDO for modelv0+v1 with fine tuning on 3 maps
+
 \todo Share links to videos from simulator and AIDO submissions
 
 \todo Discuss quantative performance for each model including baseline
