@@ -66,6 +66,10 @@ This is the command for training the current best model (on Colab):
 python model_training/train.py --model v1 --save_name modelv1 --split 0.9 --epochs 100 --batch_size 64 --log_file maserati_bill_simulated_amadobot_base.log --using_colab
 ```
 
+### Fine tuning
+
+In order to do fine tuning you need to first train the base model and save a full checkpoint including the optimizer's state_dict by adding the flag: `--save_checkpoint`. When running fine tuning, include the flag `--from_checkpoint <path to checkpoint>`
+
 ## Evaluation
 
 Currently all evaluation is being done using the AIDO submission format and performing local or remote evaluation against the simulator. More details are in the README in `/aido_submissions`.

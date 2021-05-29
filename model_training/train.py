@@ -59,6 +59,16 @@ def parse_args():
         help='Uses different settings to account for fewer system resources',
         action='store_true', default=False,
     )
+    parser.add_argument(
+        '--save_checkpoint',
+        help='Store a full checkpoint including optimizer state_dict, allows for fine tuning or resuming training',
+        action='store_true', default=False,
+    )
+    parser.add_argument(
+        '--from_checkpoint',
+        help='If provided, the given path is used to load a checkpoint to resume training from',
+        default='', type=str,
+    )
 
     return parser.parse_args()
 
@@ -119,6 +129,11 @@ def train(args):
     criterion_lin = nn.MSELoss()
     criterion_ang = nn.MSELoss()
     optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=MOMENTUM)
+
+    if args.from_checkpoint:
+        checkpoint = torch.load(args.from_checkpoint, map_location=device)
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
     # For logging to Tensorboard.
     tb_writer = SummaryWriter()
@@ -214,7 +229,13 @@ def train(args):
         tb_writer.add_scalar('Accuracy/validation/linear', validation_accuracy_lin_pct, epoch)
         tb_writer.add_scalar('Accuracy/validation/angular', validation_accuracy_ang_pct, epoch)
 
-    torch.save(model.state_dict(), f'./{args.save_name}.pth')
+    if args.save_checkpoint:
+        torch.save({
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+        }, f'./checkpoint_{args.save_name}.pth')
+    else:
+        torch.save(model.state_dict(), f'./{args.save_name}.pth')
     logging.info('Finished Training')
 
 
