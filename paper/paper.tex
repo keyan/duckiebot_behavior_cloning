@@ -53,7 +53,7 @@ We used the \texttt{gym-duckietown} simulator \cite{gym_duckietown} for training
 
 \subsection{Real World}
 
-Evaluation on the real duckiebot was done on four different maps (\ref{fig:maps}), with a 60 second maximum episode duration. Only map2 was used for real robot data collection.
+Evaluation on the real duckiebot was done on five different maps (\ref{fig:maps}), with a 60 second maximum episode duration. Only map2 was used for training data collection.
 
 \begin{figure}[H]
 \centering
@@ -61,15 +61,18 @@ Evaluation on the real duckiebot was done on four different maps (\ref{fig:maps}
     \qquad
     \subfloat[\centering map2]{{\includegraphics[width=5cm]{map2} }}
     \qquad
-    \subfloat[\centering map3]{{\includegraphics[width=5cm]{map3} }}
+    \subfloat[\centering map3]{{\includegraphics[angle=90,width=4cm]{map3} }}
     \qquad
-    \subfloat[\centering map4]{{\includegraphics[width=5cm]{map4} }}
-    \caption{Digital overview of the four maps used for real-world evaluation.}
+    \subfloat[\centering map4]{{\includegraphics[angle=90,width=4cm]{map4} }}
+    \qquad
+    \subfloat[\centering map5]{{\includegraphics[angle=90,width=4cm]{map5} }}
+    \qquad
+    \caption{Digital overview of the five maps used for real-world evaluation.}
     \label{fig:maps}
 \end{figure}
 
 \begin{figure}[H]
-\includegraphics[angle=-90,width=8cm,keepaspectratio]{map2_real}
+\includegraphics[width=8cm,keepaspectratio]{map2_real}
 \centering
 \caption{Photo of physical layout of map2.}
 \label{fig:map2_real}
@@ -81,7 +84,11 @@ Our initial solution was to use the \texttt{gym-duckietown} environment to train
 
 \todo Some brief amount of discussion about DQN and DDPG that shows we at least understand it \\
 
-Unfortunately we were unsuccessful in achieving reasonable training results with this method, with our agent consistently showing an inability to increase average reward obtained despite experimenting with domain randomization in the simulator, training across multiple maps, and performing hyperparameter search (Figure \ref{fig:rl_training}). Our initial impression was that training an agent to perform well in simulation would be straightforward and the main challenge would be in transferring the agent to the real environment. When our agents failed to show any promising results during training and subsequently failed to perform in simulation at all, we decided to abandon this approach. Videos of evaluation of these agents in simulation can be found at \url{https://youtu.be/SDZ59_2zhGg} (DQN agent) and \url{https://youtu.be/1xL8b2MK6N4} (DDPG agent).
+Unfortunately we were unsuccessful in achieving reasonable training results with this method, with our agent consistently showing an inability to increase average reward obtained despite experimenting with domain randomization in the simulator, training across multiple maps, and performing hyperparameter search (Figure \ref{fig:rl_training}). Our initial impression was that training an agent to perform well in simulation would be straightforward and the main challenge would be in transferring the agent to the real environment. When our agents failed to show any promising results during training and subsequently failed to perform in simulation at all, we decided to abandon this approach. Videos of evaluation of these agents in simulation can be found at:
+\begin{itemize}
+    \item DQN agent: \url{https://youtu.be/SDZ59_2zhGg}
+    \item DDPG agent: \url{https://youtu.be/1xL8b2MK6N4}
+\end{itemize}
 
 \begin{figure}[H]
 \centering
@@ -139,7 +146,7 @@ Ultimately we used two final datatsets. The largest (henceforth ``dataset A") wa
 \end{figure}
 
 \subsection{Training}
-All training was done using stochastic gradient descent and mean squared error loss. The models were trained initially on the aggregated dataset (``dataset A") for 200 epochs, results in Figure \ref{fig:training_results}. As the ``nvidia" model did not show promising results during training, it was excluded from further experimentation. Then ``modelv0" and ``modelv1" were fine tuned for 50 epochs using the custom real robot dataset (``dataset B"), results in Figure \ref{fig:fine_tuning_training_results}.
+All training was done using stochastic gradient descent and mean squared error loss. The models were trained initially on the aggregated dataset (``dataset A") for 200 epochs, results in Figure \ref{fig:training_results}. As the ``nvidia" model did not show promising results during training, it was excluded from further experimentation. Then ``modelv0" and ``modelv1" were fine tuned for 50 epochs using the custom real robot dataset (``dataset B"), results in Figure \ref{fig:fine_tuning_training_results}. A prediction was deemed accurate if the continuous velocity value was within 5\% of the label value.
 
 \begin{figure}
   \centering
@@ -169,7 +176,7 @@ All training was done using stochastic gradient descent and mean squared error l
   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_linear_accuracy}}\hfill
   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_angular_accuracy}}\hfill
   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_200_fine_tuned_cw_ccw_loss}}\par
-  \caption{Results from fine tuning the shared weights models on dataset B, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
+  \caption{Results from fine tuning the shared weights models on dataset B, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value. Poor angular accuracy was achieved and training loss on the validation set plateaued quickly.}
   \label{fig:fine_tuning_training_results}
 \end{figure}
 
@@ -177,48 +184,101 @@ All training was done using stochastic gradient descent and mean squared error l
 
 \subsection{Simulator and AIDO}
 
-\todo 3x3 figure showing overview map trajectories from AIDO for initial 3 models on 3 maps
-% \begin{figure}
-%   \centering
-%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{nvidia}}%
-%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_linear_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_angular_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{nvidia_loss}}\par
-%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv0}}%
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_linear_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_angular_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv0_loss}}\par
-%   \raisebox{35pt}{\parbox[b]{.1\textwidth}{modelv1}}%
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_linear_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_angular_accuracy}}\hfill
-%   \subfloat{\includegraphics[width=.28\textwidth]{modelv1_loss}}
-%   \caption{Results from training the three different model architectures on dataset A, showing linear accuracy, angular accuracy, and loss achieved. A prediction was considered correct if the continuous velocity value was within 5\% of the label value.}
-%   \label{fig:training_results}
-% \end{figure}
+By writing an agent using the agent interface in the AIDO template, we were able to leverage the existing AIDO infrastructure for evaluating in simulation. We submitted all three of our models along with the baseline solution provided by Duckietown to the \texttt{aido-LF-sim-validation} challenge. This evaluates each solution across multiple runs and different maps, providing videos of robot execution in the simulator as well as overhead views of the robot trajectories. Visualization of the trajectories taken for all these models across three maps is shown in Figure \ref{fig:sim_results_original}. We noticed that our models performed roughly equivalent to the baseline solution or did worse.
 
-\todo 2x3 figure showing overview map trajectories from AIDO for modelv0+v1 with fine tuning on 3 maps
+Following additional experimentation it appeared that the high linear velocity predicted by our models did not allow for sufficient time to make turns, and in general our models had difficulties in applying enough angular velocity to make turns effectively. To counteract this issue we applied hard coded modifications to the predicted linear and angular velocities at each command time step, dividing the predicted velocity by 2 and multiplying the predicted angular velocity by $1.5$. Henceforth these manually modified models are signified as such with the suffix ``*". This modification significantly improved the ability of our agent to navigate, which was our primary objective, even though it was at the cost of decreased travel distance within the 60 second episode length. We also applied this modification to the baseline solution in order to provide a better comparison, these results can be found in Figure \ref{fig:sim_results_modified}.
 
-\todo Share links to videos from simulator and AIDO submissions
+Simulation results for the fine-tuned models were very poor, performing worse than the original unmodified models even. Visualizations of these results are not included for brevity, but real robot results are discussed below.
 
-\todo Discuss quantative performance for each model including baseline
+\begin{figure}
+    \centering
+    \includegraphics[width=.23\textwidth]{sim_baseline_0}
+    \includegraphics[width=.23\textwidth]{sim_nvidia_0}
+    \includegraphics[width=.23\textwidth]{sim_v0_0}
+    \includegraphics[width=.23\textwidth]{sim_v1_0}
+
+    \includegraphics[width=.23\textwidth]{sim_baseline_1}
+    \includegraphics[width=.23\textwidth]{sim_nvidia_1}
+    \includegraphics[width=.23\textwidth]{sim_v0_1}
+    \includegraphics[width=.23\textwidth]{sim_v1_1}
+
+    \subfloat[baseline]{
+        \includegraphics[width=.23\textwidth]{sim_baseline_2}
+    }
+    \subfloat[nvidia]{
+        \includegraphics[width=.23\textwidth]{sim_nvidia_2}
+    }
+    \subfloat[modelv0]{
+        \includegraphics[width=.23\textwidth]{sim_v0_2}
+    }
+    \subfloat[modelv1]{
+        \includegraphics[width=.23\textwidth]{sim_v1_2}
+    }
+    \caption{Robot trajectories in simulation on three different maps for the baseline solution (a) and each of the evaluated models (b-d).}
+  \label{fig:sim_results_original}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.23\textwidth]{sim_baseline_star_0}
+    \includegraphics[width=.23\textwidth]{sim_nvidia_star_0}
+    \includegraphics[width=.23\textwidth]{sim_v0_star_0}
+    \includegraphics[width=.23\textwidth]{sim_v1_star_0}
+
+    \includegraphics[width=.23\textwidth]{sim_baseline_star_1}
+    \includegraphics[width=.23\textwidth]{sim_nvidia_star_1}
+    \includegraphics[width=.23\textwidth]{sim_v0_star_1}
+    \includegraphics[width=.23\textwidth]{sim_v1_star_1}
+
+    \subfloat[baseline*]{
+        \includegraphics[width=.23\textwidth]{sim_baseline_star_2}
+    }
+    \subfloat[nvidia*]{
+        \includegraphics[width=.23\textwidth]{sim_nvidia_star_2}
+    }
+    \subfloat[modelv0*]{
+        \includegraphics[width=.23\textwidth]{sim_v0_star_2}
+    }
+    \subfloat[modelv1*]{
+        \includegraphics[width=.23\textwidth]{sim_v1_star_2}
+    }
+    \caption{Robot trajectories in simulation on three different maps for the baseline solution (a) and each of the evaluated models (b-d), in all cases the solutions were manually modified to apply a linear transformation of the predicted velocity values.}
+  \label{fig:sim_results_modified}
+\end{figure}
 
 \subsection{Real World}
 
-\todo Discuss quantative performance for each model including baseline
+Having previously determined in simulation that the manually modified models (``nvidia*", ``modelv0*", ``modelv1*") performed best, we expected this result to be true during real robot evaluation as well. All initial evaluations were done on map2 (Figure \ref{fig:maps}b) and from these we determined that ``modelv1*" was the overall best performing model, so it was evaluated on the other maps as well.
 
-\todo Share links to videos for each map/model evaluated
+The following videos contain results from testing all three models along with the baseline solution on map2:
+\begin{itemize}
+    \item original models: \url{https://youtu.be/j7rHbaK74h8}
+    \item modified models: \url{https://youtu.be/6s80amO3GV8}
+\end{itemize}
 
-Baselines map2:
-\url{https://youtu.be/oNrlfTRxNy0}
+\subsubsection{Fine Tuning}
 
-Model v1 map2:
-\url{https://youtu.be/NMiHz7VIw_4}
+Consistent with the accuracy obtained during training and lack of ability to decrease validation set loss when performing fine tuning (Figure \ref{fig:fine_tuning_training_results}), real robot performance was much worse with this additional training, see \url{https://youtu.be/v5AOjATDAyU}. This is not altogether surprising though given that poor quality of the human driver controls used to create the custom dataset. It was simply too difficult to drive the robot even as a human given the coarse grained tools provided for user input and the overall quality and reliability of the robot. During human driving there were consistently moments where the robot seemed to drift off and execute some control the human did not apply. These factors likely contributed to a noisy dataset that did not improve the performance of our system.
+
+\subsubsection{Generalization}
+
+In order to evaluate the ability of our best performing model ``modelv1*" to generalize to other maps it was tested alongside ``baseline*" on the remaining maps (see below). In general the results were consistent with performance on map2 with the caveat that our solution could not handle right turns. This is likely an issue with our dataset having not enough examples of right turns and hence the robot was unable to use prior examples to successfully navigate this situation.
+
+\begin{itemize}
+    \item map1: \url{https://youtu.be/jYgHov8mpX4}
+    \item map3: \url{https://youtu.be/ALZrHWevRJ4}
+    \item map4: \url{https://youtu.be/Oodr0QcEKJM}
+    \item map5: \url{https://youtu.be/zt69aAOWHX4}
+\end{itemize}
 
 \section{Potential Future Improvements}
-
-\todo Discuss algorithmic enhancements
-
-\todo Discuss robot limitations
+\begin{enumerate}
+    \item As explained in prior sections, one limitation faced was the difficultly in collecting good real robot data. Possibly one way to have circumvented this was to use the duckiebot's Xbox controller interface for human driving, assuming that this input possibly has better fine grained control.
+    \item As observed in our agent's inability to generalize to certain maps, we had a dearth of data with right hand turns. Improving our dataset to include more diverse situations would likely improve real world performance.
+    \item In general issues with the robot caused limitations in our groups ability to properly evaluate our agents. One group member's robot had consistent issues with keeping its wheel on and rendered him unable to use his robot in a meaningful way. The use of more robust robot components would certainly improve the ability to iterate during experimentation and also have a system less subject to control noise.
+    \item We suspected that performance at inference time might have been a bottleneck for our system. Possibly this is one reason that introducing a hard coded linear velocity reduction improved performance, by allowing time to do inference on observations corresponding to turn taking. A potential place to look for performance improvement would be to either quantize our PyTorch model to speed up CPU-based inference, or to adapted our system to use the onboard GPU on the Jetson Nano. Despite some effort in trying to adapt the duckietown software stack to use the GPU, the containerized software system was unable to detect the on-board GPU and hence we could not leverage it.
+    \item We also believe that using a recurrent network model has the potential to improve performance. Although our data input is actually video, we treated it as isolated image frames and lost the ability to leverage prior observations in making predictions.
+\end{enumerate}
 
 \bibliographystyle{alpha}
 \bibliography{paper}
