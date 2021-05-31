@@ -11,7 +11,7 @@
 \usepackage{graphicx, float, subfig}
 \graphicspath{ {./figures/} }
 
-\newcommand\todo{\textcolor{red}{\textbf{[TODO:] }}}
+\newcommand\todo[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 
 \title{Learning end-to-end control for duckiebot driving}
 \author{Group: Dropouts}
@@ -82,9 +82,15 @@ Evaluation on the real duckiebot was done on five different maps (\ref{fig:maps}
 
 Our initial solution was to use the \texttt{gym-duckietown} environment to train an agent using a model-free off-policy Q-learning algorithm, for which we explored both DQN \cite{DBLP:journals/corr/MnihKSGAWR13} and DDPG \cite{journals/corr/LillicrapHPHETS15} algorithms. Our training code leveraged pre-written implementations of both algorithms provided through the RLLib package \cite{DBLP:journals/corr/abs-1712-09381}. We leveraged the existing default reward function provided by the gym environment (\url{https://git.io/JGnsg}) which is a linear function of the robot speed, position within the lane relative to the right line, and proximity to obstacles.
 
-\todo Some brief amount of discussion about DQN and DDPG that shows we at least understand it \\
+Our first approach was DQN. In this case actor is learning the Q function (value function of state, action pair). In our case the network is given an image from the camera and is predicting the value over 3 possible actions, driving $45^\circ$ to the left/right, and driving forward. During training DQN averages the reward function over the whole episode. These episodes are then played and collected into \textit{replay buffer}, which when full triggers an iteration of neural network training.
 
-Unfortunately we were unsuccessful in achieving reasonable training results with this method, with our agent consistently showing an inability to increase average reward obtained despite experimenting with domain randomization in the simulator, training across multiple maps, and performing hyperparameter search (Figure \ref{fig:rl_training}). Our initial impression was that training an agent to perform well in simulation would be straightforward and the main challenge would be in transferring the agent to the real environment. When our agents failed to show any promising results during training and subsequently failed to perform in simulation at all, we decided to abandon this approach. Videos of evaluation of these agents in simulation can be found at:
+Given enough training samples (our longest run was $>200$ iterations, around 30 episodes each), the model should converge to a good result. Our main motivation for this network was that small set of discrete actions should overfit less to the simulation environment (this is because with slight changes to exact values of Q function calculated the maximal action would stay the same). However it has the obvious drawback of being much less flexible in its actions and possible recovery.
+
+Our second approach was DDPG, which by working with continuous space addresses the main drawback of DQN, as stated above, while being extremely similar. The main two differences lie in the fact that DDPG uses actor-critic framework, where neural network outputs both the action and the predicted value function of state input and action tuple, as well as that the fact that weights of the network are using "soft" target, which causes them to change less and stabilizes learning.
+
+\todo{Put architectures of models for DQN and DDPG here}
+
+Unfortunately we were unsuccessful in achieving reasonable training results with these methods, with our agent consistently showing an inability to increase average reward obtained despite experimenting with domain randomization in the simulator, training across multiple maps, and performing hyperparameter search (Figure \ref{fig:rl_training}). Our initial impression was that training an agent to perform well in simulation would be straightforward and the main challenge would be in transferring the agent to the real environment. We tried customizing reward function to additionally benefit from distance travelled, but to no fruition. When our agents failed to show any promising results during training and subsequently failed to perform in simulation at all, we decided to abandon this approach. Videos of evaluation of these agents in simulation can be found at:
 \begin{itemize}
     \item DQN agent: \url{https://youtu.be/SDZ59_2zhGg}
     \item DDPG agent: \url{https://youtu.be/1xL8b2MK6N4}
