@@ -12,21 +12,3 @@ python tensorboard_to_plot.py --logdir <path to the tensorboard data> --prefix <
 ```
 
 It is a little brittle and requires being passed data from only one training run.
-
-## Videos needed
-
-map2
-v0 + v0 slow
-v0 + v0 slow 200 epochs
-v1 + v1 slow 200 epochs
-v1f + v1f slow 200 epochs
-
-map3
-v1 + v1
-v1 + v1 slow 200 epochs
-v1f + v1f slow 200 epochs
-
-map4
-v1 + v1
-v1 + v1 slow 200 epochs
-v1f + v1f slow 200 epochs
