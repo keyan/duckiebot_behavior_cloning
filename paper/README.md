@@ -4,7 +4,7 @@ LaTeX source for the final report as well as figures and training data collected
 
 ## Figure generation
 
-There is a script in the `./data` directory that can take as input tensorboard log data in the format expected to be written by the training scripts in `./model_training` and outputs seaborn generated png files showing training and validation performance.
+There is a script that can take as input tensorboard log data in the format expected to be written by the training scripts in `./model_training` and outputs seaborn generated png files showing training and validation performance.
 
 To use them:
 ```
@@ -12,3 +12,21 @@ python tensorboard_to_plot.py --logdir <path to the tensorboard data> --prefix <
 ```
 
 It is a little brittle and requires being passed data from only one training run.
+
+## Videos needed
+
+map2
+v0 + v0 slow
+v0 + v0 slow 200 epochs
+v1 + v1 slow 200 epochs
+v1f + v1f slow 200 epochs
+
+map3
+v1 + v1
+v1 + v1 slow 200 epochs
+v1f + v1f slow 200 epochs
+
+map4
+v1 + v1
+v1 + v1 slow 200 epochs
+v1f + v1f slow 200 epochs

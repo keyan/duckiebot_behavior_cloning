@@ -28,5 +28,7 @@ __pycache__
 
 # Latex
 *.aux
+*.bbl
+*.blg
 
 *.resolved
