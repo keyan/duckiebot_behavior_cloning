@@ -88,8 +88,6 @@ Given enough training samples (our longest run was $>200$ iterations, around 30 
 
 Our second approach was DDPG, which by working with continuous space addresses the main drawback of DQN, as stated above, while being extremely similar. The main two differences lie in the fact that DDPG uses actor-critic framework, where neural network outputs both the action and the predicted value function of state input and action tuple, as well as that the fact that weights of the network are using "soft" target, which causes them to change less and stabilizes learning.
 
-\todo{Put architectures of models for DQN and DDPG here}
-
 Unfortunately we were unsuccessful in achieving reasonable training results with these methods, with our agent consistently showing an inability to increase average reward obtained despite experimenting with domain randomization in the simulator, training across multiple maps, and performing hyperparameter search (Figure \ref{fig:rl_training}). Our initial impression was that training an agent to perform well in simulation would be straightforward and the main challenge would be in transferring the agent to the real environment. We tried customizing reward function to additionally benefit from distance travelled, but to no fruition. When our agents failed to show any promising results during training and subsequently failed to perform in simulation at all, we decided to abandon this approach. Videos of evaluation of these agents in simulation can be found at:
 \begin{itemize}
     \item DQN agent: \url{https://youtu.be/SDZ59_2zhGg}
