@@ -19,7 +19,7 @@ VEHICLE_NAME = 'maserati'
 MessageCollection = collections.namedtuple(
     "MessageCollection", ["topic", "type", "messages"])
 
-frank_logger = Logger(log_file='converted/dataset.log')
+frank_logger = Logger(log_file=f'converted/{VEHICLE_NAME}')
 
 
 def extract_messages(path, requested_topics):
@@ -31,17 +31,12 @@ def extract_messages(path, requested_topics):
     bag = rosbag.Bag(path)
 
     _, available_topics = bag.get_type_and_topic_info()
-
-    # print(available_topics)
-
     # check if the requested topics exist in bag's topics and if yes extract the messages only for them
     extracted_messages = {}
     for topic in requested_topics:
-        if topic not in available_topics:
-            raise ValueError(
-                "Could not find the requested topic (%s) in the bag %s" % (topic, path))
-        extracted_messages[topic] = MessageCollection(
-            topic=topic, type=available_topics[topic].msg_type, messages=[])
+        if topic in available_topics:
+            extracted_messages[topic] = MessageCollection(
+                topic=topic, type=available_topics[topic].msg_type, messages=[])
 
     for msg in bag.read_messages():
         topic = msg.topic
@@ -100,6 +95,8 @@ def main():
         print("Extract data for {} file.".format(file))
         try:
             msgs = extract_messages(abs_path, ros_topics_temp)
+            if not msgs:
+                continue
         except rosbag.bag.ROSBagException:
             print("Failed to open {}".format(abs_path))
             continue
@@ -117,8 +114,29 @@ def main():
                           "/camera_node/image/compressed"].messages
         ext_car_cmds = msgs["/" + duckiebot_name + "/joy"].messages
 
+        img_start_timestamp = ext_images[0].timestamp.secs + ext_images[0].timestamp.nsecs * \
+            10 ** -len(str(ext_images[0].timestamp.nsecs))
+        img_end_timestamp = ext_images[-1].timestamp.secs + ext_images[-1].timestamp.nsecs * \
+            10 ** -len(str(ext_images[-1].timestamp.nsecs))
+        control_start_timestamp = ext_car_cmds[0].timestamp.secs + ext_car_cmds[0].timestamp.nsecs * \
+            10 ** -len(str(ext_car_cmds[0].timestamp.nsecs))
+        control_end_timestamp = ext_car_cmds[-1].timestamp.secs + ext_car_cmds[-1].timestamp.nsecs * \
+            10 ** -len(str(ext_car_cmds[-1].timestamp.nsecs))
+
+        last_timestamp_to_extract = min(
+            img_start_timestamp + 0.9 * (img_end_timestamp - img_start_timestamp),
+            control_start_timestamp + 0.9 * (control_end_timestamp - control_start_timestamp),
+        )
+
         # create dataframe with the images and the images' timestamps
         for num, img in enumerate(ext_images):
+            # hack to get the timestamp of each image in <float 'secs.nsecs'> format instead of <int 'rospy.rostime.Time'>
+            temp_timestamp = ext_images[num].timestamp
+            img_timestamp = temp_timestamp.secs + temp_timestamp.nsecs * \
+                10 ** -len(str(temp_timestamp.nsecs))
+
+            if img_timestamp > last_timestamp_to_extract:
+                continue
 
             # get the rgb image
             #### direct conversion to CV2 ####
@@ -127,11 +145,6 @@ def main():
             # print("img", img, img.shape)
             img = cvbridge_object.compressed_imgmsg_to_cv2(img.message)
             img = image_preprocessing(img)
-
-            # hack to get the timestamp of each image in <float 'secs.nsecs'> format instead of <int 'rospy.rostime.Time'>
-            temp_timestamp = ext_images[num].timestamp
-            img_timestamp = temp_timestamp.secs + temp_timestamp.nsecs * \
-                10 ** -len(str(temp_timestamp.nsecs))
 
             temp_df = pd.DataFrame({
                 'img': [img],
@@ -152,6 +165,9 @@ def main():
             temp_timestamp = ext_car_cmds[num].timestamp
             vel_timestamp = temp_timestamp.secs + temp_timestamp.nsecs * \
                 10 ** -len(str(temp_timestamp.nsecs))
+
+            if vel_timestamp > last_timestamp_to_extract:
+                continue
 
             temp_df = pd.DataFrame({
                 'vel_timestamp': [vel_timestamp],
