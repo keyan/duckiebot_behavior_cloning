@@ -55,8 +55,10 @@ Could not extract any frames:
 ```
 20160314210733_penguin
 20180108195947_a313
+20180108135251_a313
 20171226183955_yaf
 20160503185748_starduck
+20160502181127_ernie
 ```
 
 Very poor quality data extracted:
