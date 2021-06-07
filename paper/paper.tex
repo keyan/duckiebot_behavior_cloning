@@ -284,6 +284,25 @@ In order to evaluate the ability of our best performing model ``modelv1*" to gen
     \item We also believe that using a recurrent network model has the potential to improve performance. Although our data input is actually video, we treated it as isolated image frames and lost the ability to leverage prior observations in making predictions.
 \end{enumerate}
 
+\subsection{3D Convolutions}
+To at least partially address the fifth potential improvement we decided to try 3D Convolution, where the additional dimension of kernel was over time.
+
+Different approach requires different data processing. We first split processed each log separately into episodes. For sentence length $S = 128$, we pad the first frame $S$ times to the beginning of each episode in training data. This is done to force robot to learn how to start driving. Then we iterate over these frames with step 10 creating videos of length $S$ at each step. For each video we define the target angular and linear velocities based on the last frame. Thus each observation was $\mathbb{R}^{n \times 128 \times 3 \times 150 \times 200}$ (where $n$ is batch size), while both velocities were $\mathbb{R}$. Lastly, since angular velocities are skewed significantly towards $0^\circ$ training data is filtered so that there are equal amounts of examples with $|\omega| > 0.25$ and $|\omega| \le 0.25$.
+
+Model architecture uses multiple 3D convolution layers with decreasing number of channels (time dimension) from 128 to 16. Model then reshapes data to $\mathbb{R}^{n \times 48 \times 150 \times 200}$ and passes it through architecture similar to V1.
+
+\begin{figure}
+\centering
+    \subfloat[\centering Linear Accuracy]{{\includegraphics[width=0.4\textwidth]{figures/model3d_linear_accuracy.png} }}
+    \qquad
+    \subfloat[\centering Angular Accuracy]{{\includegraphics[width=0.4\textwidth]{figures/model3d_angular_accuracy.png} }}
+    \caption{Results from training model with 3D convolutions.}
+    \label{fig:data_examples}
+\end{figure}
+
+The results of the model were disappointing, as it failed to successfully predict almost any angular velocity correctly. Moreover it also overfitted to training data, while performing worse than all image based models.
+
+In conclusion we believe that video-based inference is a viable approach, however 3D convolutions are not the best suited for the task, or are extremely difficult to find correct hyperparameters for.
 \bibliographystyle{alpha}
 \bibliography{paper}
 
