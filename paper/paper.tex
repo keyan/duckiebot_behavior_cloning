@@ -1,7 +1,7 @@
 \documentclass{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath, enumitem, url}
+\usepackage{amsmath, enumitem, url, amsfonts}
 \usepackage{xcolor}
 \usepackage[margin=1in]{geometry}
 
@@ -39,7 +39,7 @@ Members:
 
 \section{Task Overview}
 
-In this project we sought to explore methods for learning an end-to-end control policy that would allow the duckiebot to navigate tracks autonomously. Our goal was to enable the duckiebot and have it navigate around an entire track without any major driving infractions (defined as exiting the lane or going off the road), using only monocular camera data. Ideally this system would be robust enough to generalize to new tracks and work on the real robot as well as in simulation.
+In this project we sought to explore methods for learning an end-to-end control policy that would allow the duckiebot to navigate tracks autonomously. Our goal was to enable the duckiebot and have it follow a lane and navigate around an entire track without any major driving infractions (defined as exiting the lane or going off the road), using only monocular camera data. Ideally this system would be robust enough to generalize to new tracks and work on the real robot as well as in simulation.
 
 Inspired by previous efforts in learning end-to-end control for driving using deep reinforcement learning \cite{DBLP:journals/corr/abs-1807-00412} our original plan was to evaluate a selection of reinforcement learning algorithms to solve this task. Knowing that reproducing reinforcement results is difficult and often unsuccessful \cite{henderson2019deep}, we planned to also experiment with a behavior cloning approach inspired by prior work from NVIDIA where a convolutional neural network was trained to steer a car using only image data \cite{DBLP:journals/corr/BojarskiTDFFGJM16}.
 
